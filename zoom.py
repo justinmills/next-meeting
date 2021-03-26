@@ -63,9 +63,17 @@ def get_zoom_link(event: dict) -> str:
         return loc
     
     eps = event.get("conferenceData", {}).get("entryPoints", [])
-    found = next(ep for ep in eps if "zoom.us" in ep.get("uri", ""))
-    if found:
-        return found["uri"]
+    # Sometimes an event returns an empty array here which results in a StopIteration
+    # error when we try to use the following for loop
+    if eps:
+        found = next(ep for ep in eps if "zoom.us" in ep.get("uri", ""))
+        if found:
+            return found["uri"]
+        else:
+            print("\tConference data found, but no zoom links in it")
+    else:
+        print("\tNo conference data found for event")
+        # print(event)
 
     return None
 
@@ -124,33 +132,50 @@ def main():
 
     # Call the Calendar API
     now: datetime = datetime.now(tz=timezone.utc)
+    # now: datetime = datetime.now(tz=timezone.utc) - timedelta(hours=1)
     now_str: str = now.isoformat()
-    print(f"Getting the upcoming {NUM_NEXT} events")
+    print(f"Getting the upcoming {NUM_NEXT} events from {now_str}")
     events_result = service.events().list(calendarId='primary', timeMin=now_str,
                                         maxResults=NUM_NEXT, singleEvents=True,
                                         orderBy='startTime').execute()
     events = events_result.get('items', [])
+    for event in events:
+        start = event['start'].get('dateTime', event['start'].get('date'))
+        summary = event["summary"]
+        is_not_day = is_not_day_only(event)
+        has_zoom = False
+        if is_not_day:
+            has_zoom = has_zoom_link(event)
+        print(start, summary, is_not_day, has_zoom)
 
     if not events:
         print('No upcoming events found.')
     filtered = list(filter(has_zoom_link, filter(is_not_day_only, events)))
+    # Debugging purposes...
     for event in filtered:
         start = event['start'].get('dateTime', event['start'].get('date'))
         summary = event["summary"]
         link = get_zoom_link(event)
         zl = convert_to_zoom_protocol(link)
         print(start, summary, zl)
-    
-    e = find_event_to_join(now, filtered)
-    if e:
+
+    if filtered:
+        e = find_event_to_join(now, filtered)
+        if e:
+            print()
+            print("Joining zoom for")
+            summary = e["summary"]
+            zl = convert_to_zoom_protocol(get_zoom_link(e))
+            print(summary, zl)
+            cmd = f"open \"{zl}\""
+            print(f"\t{cmd}")
+            os.system(cmd)
+        else:
+            print()
+            print("Of the zoom meetings found, unable to find one to join.")
+    else:
         print()
-        print("Joining zoom for")
-        summary = e["summary"]
-        zl = convert_to_zoom_protocol(get_zoom_link(e))
-        print(summary, zl)
-        cmd = f"open \"{zl}\""
-        print(f"\t{cmd}")
-        os.system(cmd)
+        print("None of the upcoming meetings have zoom links.")
 
 
 if __name__ == '__main__':
