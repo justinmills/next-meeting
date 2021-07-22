@@ -54,7 +54,7 @@ def get_zoom_link(event: Dict[str, str], args: Args) -> Optional[str]:
             loc = next(l for l in loc.split(",") if "zoom.us" in l)  # noqa: E741
         return loc
 
-    eps = event.get("conferenceData", {}).get("entryPoints", [])
+    eps = event.get("conferenceData", {}).get("entryPoints", [])  # type: ignore
     # Sometimes an event returns an empty array here which results in a StopIteration
     # error when we try to use the following for loop
     if eps:
@@ -82,7 +82,7 @@ def convert_to_zoom_protocol(url: str) -> str:
       zoommtg://example.zoom.us/join?action=join&confno=1234&pwd=abcd
     """
     parsed: ParseResult = urlparse(url)
-    hostname: str = parsed.hostname
+    hostname: Optional[str] = parsed.hostname
     confno: str = parsed.path.split("/")[-1]
     qargs: Dict[str, List[str]] = parse_qs(parsed.query)
 
