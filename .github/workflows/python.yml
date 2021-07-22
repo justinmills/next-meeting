@@ -54,3 +54,10 @@ jobs:
       if: always()
       with:
         files: ./**/results.xml
+
+    - name: Publish Code Coverage Report
+      uses: codecov/codecov-action@v2
+      if: always()
+      with:
+        files: ./coverage.xml
+        verbose: true # optional (default = false)
