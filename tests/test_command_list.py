@@ -1,9 +1,8 @@
-import pytest
-from next_meeting.args import Args, NextMeetingOptions
-from next_meeting.main import command_list
+from unittest.mock import MagicMock, patch
 
-from . import factories as f
-from unittest.mock import patch, MagicMock
+import pytest
+from next_meeting.args import Args
+from next_meeting.main import command_list
 
 
 @pytest.fixture

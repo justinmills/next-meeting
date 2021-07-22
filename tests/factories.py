@@ -17,6 +17,7 @@ def sample_my_event() -> MyEvent:
         icon="icon.png",
     )
 
+
 def read_event_file(file: str) -> Dict[str, str]:
     """Read one of the json files in tests/events/
 

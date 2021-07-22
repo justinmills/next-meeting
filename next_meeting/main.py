@@ -2,8 +2,15 @@ from datetime import datetime
 from typing import Dict, List, Optional, Tuple, Union
 
 from .alfred import AlfredWorkflow, JsonUtilityFormat, ScriptFilterOutput
-from .args import (Args, Command, NextMeetingOptions, OutputFormat, _debug,
-                   _output, parse_args)
+from .args import (
+    Args,
+    Command,
+    NextMeetingOptions,
+    OutputFormat,
+    _debug,
+    _output,
+    parse_args,
+)
 from .gcal import fetch_events
 from .parsing import MyEvent, _debug_event_list, parse_events
 

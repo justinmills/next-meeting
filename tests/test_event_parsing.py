@@ -1,6 +1,6 @@
 from datetime import datetime
+
 import pytest
-import json
 from next_meeting.args import Args
 from next_meeting.parsing import MyEvent, parse_event, parse_events
 
@@ -19,7 +19,9 @@ def expected_single_event() -> MyEvent:
     )
 
 
-def test_parse_events(args: Args, single_raw_event: dict, expected_single_event: MyEvent):
+def test_parse_events(
+    args: Args, single_raw_event: dict, expected_single_event: MyEvent
+):
     parsed_event = parse_event(single_raw_event, args)
     assert parsed_event == expected_single_event
 
@@ -108,5 +110,7 @@ def test_parse_event_no_password(
 ):
     single_raw_event["location"] = "https://example.zoom.us/j/12345678987"
     parsed_event = parse_event(single_raw_event, args)
-    expected_single_event.zoom_link = "zoommtg://example.zoom.us/join?action=join&confno=12345678987"  # noqa: E501
+    expected_single_event.zoom_link = (
+        "zoommtg://example.zoom.us/join?action=join&confno=12345678987"  # noqa: E501
+    )
     assert parsed_event == expected_single_event

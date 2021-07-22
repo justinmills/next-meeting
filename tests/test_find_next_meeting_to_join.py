@@ -51,7 +51,7 @@ def test_multiple_in_progress(args: Args):
     for e in events:
         e.in_progress = True
         assert e.is_next_joinable is False
-    
+
     options, to_join = find_meeting_to_join(events, args)
 
     assert options == NextMeetingOptions.MultipleOptions
@@ -63,7 +63,7 @@ def test_multiple_is_next_joinable(args: Args):
     for e in events:
         e.is_next_joinable = True
         assert e.in_progress is False
-    
+
     options, to_join = find_meeting_to_join(events, args)
 
     assert options == NextMeetingOptions.MultipleOptions
@@ -79,7 +79,7 @@ def test_multiple_in_progress_one_up_next(args: Args):
     next.is_next_joinable = True
     assert next.in_progress is False
     events.append(next)
-    
+
     options, to_join = find_meeting_to_join(events, args)
 
     assert options == NextMeetingOptions.FoundNextMeeting
