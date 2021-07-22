@@ -47,4 +47,10 @@ jobs:
 
     - name: Run test suite
       run: |
-        pipenv run test -svvv
+        pipenv run test -svvv --junitxml results.xml
+
+    - name: Publish Unit Test Results
+      uses: EnricoMi/publish-unit-test-result-action@v1
+      if: always()
+      with:
+        files: **/results.xml
