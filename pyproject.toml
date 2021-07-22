@@ -5,7 +5,7 @@ testpaths = [
     "tests"
 ]
 looponfailroots = [
-    "app",
+    "next_meeting",
     "tests"
 ]
 
