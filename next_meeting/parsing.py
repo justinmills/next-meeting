@@ -77,15 +77,16 @@ def convert_to_zoom_protocol(url: str) -> str:
     """Take the incoming url and convert it to a zoom protocol url
 
     Convert this:
-      https://ellevationeducation.zoom.us/j/1234?pwd=abcd
+      https://example.zoom.us/j/1234?pwd=abcd
     to this
-      zoommtg://ellevationeducation.zoom.us/join?action=join&confno=1234&pwd=abcd
+      zoommtg://example.zoom.us/join?action=join&confno=1234&pwd=abcd
     """
     parsed: ParseResult = urlparse(url)
+    hostname: str = parsed.hostname
     confno: str = parsed.path.split("/")[-1]
     qargs: Dict[str, List[str]] = parse_qs(parsed.query)
 
-    zoom_url = [f"zoommtg://{c.ZOOM_DOMAIN}.zoom.us/join?action=join&confno=", confno]
+    zoom_url = [f"zoommtg://{hostname}/join?action=join&confno=", confno]
     if "pwd" in qargs:
         zoom_url.extend(["&pwd=", qargs["pwd"][0]])
 

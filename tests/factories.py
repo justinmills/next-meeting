@@ -13,7 +13,7 @@ def sample_my_event() -> MyEvent:
         is_not_day_event=True,
         in_progress=False,
         is_next_joinable=False,
-        zoom_link="zoommtg://ellevationeducation.zoom.us/join?action=join&confno=12345678987&pwd=SUPERSECRET1234",  # noqa: E501
+        zoom_link="zoommtg://example.zoom.us/join?action=join&confno=12345678987&pwd=SUPERSECRET1234",  # noqa: E501
         icon="icon.png",
     )
 

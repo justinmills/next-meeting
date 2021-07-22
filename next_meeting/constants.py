@@ -8,8 +8,6 @@ NUM_NEXT = 5
 JOINABLE_IF_NEXT_STARTS_WITHIN = 3
 # If true, this will dump the raw data we get back from the API
 DEBUG_RAW_EVENTS = True
-# Domain to tack onto the zoom link we generate
-ZOOM_DOMAIN = "ellevationeducation"
 # Scopes requested when authenticating against google api
 # If modifying these scopes, delete the file token.pickle.
 SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]

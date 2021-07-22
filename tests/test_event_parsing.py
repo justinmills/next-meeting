@@ -14,7 +14,7 @@ def expected_single_event() -> MyEvent:
         is_not_day_event=True,
         in_progress=False,
         is_next_joinable=False,
-        zoom_link="zoommtg://ellevationeducation.zoom.us/join?action=join&confno=12345678987&pwd=SUPERSECRET1234",  # noqa: E501
+        zoom_link="zoommtg://example.zoom.us/join?action=join&confno=12345678987&pwd=SUPERSECRET1234",  # noqa: E501
         icon="icon.png",
     )
 
@@ -108,5 +108,5 @@ def test_parse_event_no_password(
 ):
     single_raw_event["location"] = "https://example.zoom.us/j/12345678987"
     parsed_event = parse_event(single_raw_event, args)
-    expected_single_event.zoom_link = "zoommtg://ellevationeducation.zoom.us/join?action=join&confno=12345678987"  # noqa: E501
+    expected_single_event.zoom_link = "zoommtg://example.zoom.us/join?action=join&confno=12345678987"  # noqa: E501
     assert parsed_event == expected_single_event
