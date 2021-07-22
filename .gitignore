@@ -2,3 +2,8 @@
 credentials.json
 token.pickle
 zoom.log
+*.pyc
+# Test coverage related files
+/htmlcov
+.coverage
+coverage.xml

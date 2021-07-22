@@ -1,0 +1,58 @@
+{
+    "eventType": "default",
+    "reminders": {
+        "useDefault": false
+    },
+    "guestsCanModify": true,
+    "attendees": [
+        {
+            "responseStatus": "accepted",
+            "email": "user1@example.com"
+        },
+        {
+            "responseStatus": "accepted",
+            "self": true,
+            "email": "user2@example.com"
+        },
+        {
+            "responseStatus": "declined",
+            "email": "user3@example.com"
+        },
+        {
+            "responseStatus": "needsAction",
+            "email": "user4@example.com"
+        }
+    ],
+    "sequence": 2,
+    "iCalUID": "4someunique_IDENTIFIER3000@google.com",
+    "originalStartTime": {
+        "timeZone": "America/New_York",
+        "dateTime": "2021-07-12T09:30:00-04:00"
+    },
+    "recurringEventId": "4someunique_IDENTIFIER3000",
+    "end": {
+        "timeZone": "America/New_York",
+        "dateTime": "2021-07-12T09:40:00-04:00"
+    },
+    "start": {
+        "timeZone": "America/New_York",
+        "dateTime": "2021-07-12T09:30:00-04:00"
+    },
+    "organizer": {
+        "displayName": "YourTeam Calendar",
+        "email": "example.com_heypmrc27ee42srjp@group.calendar.google.com"
+    },
+    "creator": {
+        "email": "user2example.com"
+    },
+    "location": "https://example.zoom.us/j/12345678987?pwd=SUPERSECRET1234",
+    "description": "This is a meeting to review the JIRA Board.<br><br>User Two is inviting you to a scheduled Zoom meeting.<br><br>Join Zoom Meeting<br><a href=\"https://example.zoom.us/j/12345678987?pwd=SUPERSECRET1234\">https://example.zoom.us/j/12345678987?pwd=SUPERSECRET1234</a><br><br>Meeting ID: 123 4567 8987<br>Passcode: SUPERSECRET1234<br>One tap mobile<br>+13017158592,,12345678987# US (Germantown)<br>+13126266799,,12345678987# US (Chicago)<br><br>Dial by your location<br>        +1 301 715 8592 US (Germantown)<br>        +1 312 626 6799 US (Chicago)<br>        +1 646 876 9923 US (New York)<br>        +1 253 215 8782 US (Tacoma)<br>        +1 346 248 7799 US (Houston)<br>        +1 669 900 6833 US (San Jose)<br>Meeting ID: 978 1661 0217<br>Find your local number: <a href=\"https://example.zoom.us/u/aCriteA04\">https://example.zoom.us/u/aCriteA04</a><br><br><br><br>──────────",
+    "summary": "JIRA Board Review",
+    "updated": "2021-07-12T13:16:29.784Z",
+    "created": "2020-03-16T14:08:14.000Z",
+    "htmlLink": "https://www.google.com/calendar/event?eid=SoMeEventIdJibberIsh123",
+    "status": "confirmed",
+    "id": "77gcalEventId_20210712T133000Z",
+    "etag": "\"400023\"",
+    "kind": "calendar#event"
+}
