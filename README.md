@@ -25,7 +25,7 @@ picking that one.
   prevent you from accidentally checking in secret values.
 * Run it!
   ```shell
-  python ./zoom.py
+  pipenv run list
   ```
 
 The first time you will be prompted to login and authenticate against the Google
