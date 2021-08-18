@@ -56,6 +56,31 @@ def test_parse_event_no_zoom(
     assert parsed_events[0] == expected_single_event
 
 
+def test_parse_event_multiple_locations(
+    args: Args, single_raw_event: dict, expected_single_event: MyEvent
+):
+    existing_location = single_raw_event["location"]
+    single_raw_event["location"] = f"!GooberZ!,{existing_location}"
+    parsed_event = parse_event(single_raw_event, args)
+    assert parsed_event == expected_single_event
+
+
+def test_parse_event_conferenceData(
+    args: Args, single_raw_event_conferenceData: dict, expected_single_event: MyEvent
+):
+    parsed_event = parse_event(single_raw_event_conferenceData, args)
+    assert parsed_event == expected_single_event
+
+
+def test_parse_event_conferenceData_no_zoom(
+    args: Args, single_raw_event_conferenceData: dict, expected_single_event: MyEvent
+):
+    single_raw_event_conferenceData["conferenceData"]["entryPoints"][0]["uri"] = "https://www.google.com"
+    parsed_event = parse_event(single_raw_event_conferenceData, args)
+    expected_single_event.zoom_link = None
+    assert parsed_event == expected_single_event
+
+
 def test_parse_event_one_on_one(
     args: Args, single_raw_event: dict, expected_single_event: MyEvent
 ):

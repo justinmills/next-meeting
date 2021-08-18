@@ -18,4 +18,9 @@ def args(now) -> Args:
 
 @pytest.fixture
 def single_raw_event() -> dict:
-    return f.read_event_file("single-event")
+    return f.single_raw_event()
+
+
+@pytest.fixture
+def single_raw_event_conferenceData() -> dict:
+    return f.single_raw_event_conferenceData()

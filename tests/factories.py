@@ -30,3 +30,7 @@ def read_event_file(file: str) -> Dict[str, str]:
 
 def single_raw_event() -> Dict[str, str]:
     return read_event_file("single-event")
+
+
+def single_raw_event_conferenceData() -> Dict[str, str]:
+    return read_event_file("single-event-conference-data")

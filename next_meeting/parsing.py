@@ -54,11 +54,11 @@ def get_zoom_link(event: Dict[str, str], args: Args) -> Optional[str]:
             loc = next(l for l in loc.split(",") if "zoom.us" in l)  # noqa: E741
         return loc
 
+    # Safely get this value so we can iterate without getting a StopIteration
     eps = event.get("conferenceData", {}).get("entryPoints", [])  # type: ignore
-    # Sometimes an event returns an empty array here which results in a StopIteration
-    # error when we try to use the following for loop
     if eps:
-        found = next(ep for ep in eps if "zoom.us" in ep.get("uri", ""))
+        # Default arg to next to deal with no zoom links
+        found = next((ep for ep in eps if "zoom.us" in ep.get("uri", "")), None)
         if found:
             return str(found["uri"])
         else:
