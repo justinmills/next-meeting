@@ -75,7 +75,9 @@ def test_parse_event_conferenceData(
 def test_parse_event_conferenceData_no_zoom(
     args: Args, single_raw_event_conferenceData: dict, expected_single_event: MyEvent
 ):
-    single_raw_event_conferenceData["conferenceData"]["entryPoints"][0]["uri"] = "https://www.google.com"
+    single_raw_event_conferenceData["conferenceData"]["entryPoints"][0][
+        "uri"
+    ] = "https://www.google.com"
     parsed_event = parse_event(single_raw_event_conferenceData, args)
     expected_single_event.zoom_link = None
     assert parsed_event == expected_single_event

@@ -1,6 +1,6 @@
 import next_meeting.gcal as gcal
 from next_meeting.args import Args
-from unittest.mock import MagicMock, patch, mock_open
+from unittest.mock import MagicMock, patch
 
 
 @patch("next_meeting.gcal.build")
