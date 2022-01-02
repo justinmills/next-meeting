@@ -29,8 +29,9 @@ def read_event_file(file: str) -> Dict[str, str]:
 
 
 def single_raw_event() -> Dict[str, str]:
-    return read_event_file("single-event")
+    """Reads an event file from disk
 
-
-def single_raw_event_conferenceData() -> Dict[str, str]:
-    return read_event_file("single-event-conference-data")
+    This one has zoom location data in all of the potential places we look for it.
+    Specialized methods follow that will trim out selective pieces.
+    """
+    return read_event_file("single-event-all-3")

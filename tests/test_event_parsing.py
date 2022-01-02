@@ -5,8 +5,7 @@ from next_meeting.args import Args
 from next_meeting.parsing import MyEvent, parse_event, parse_events
 
 
-@pytest.fixture
-def expected_single_event() -> MyEvent:
+def expected_event(id="12345678987") -> MyEvent:
     return MyEvent(
         id="77gcalEventId_20210712T133000Z",
         start=datetime.fromisoformat("2021-07-12T09:30:00-04:00"),
@@ -14,9 +13,29 @@ def expected_single_event() -> MyEvent:
         is_not_day_event=True,
         in_progress=False,
         is_next_joinable=False,
-        zoom_link="zoommtg://example.zoom.us/join?action=join&confno=12345678987&pwd=SUPERSECRET1234",  # noqa: E501
+        zoom_link=f"zoommtg://example.zoom.us/join?action=join&confno={id}&pwd=SUPERSECRET1234",  # noqa: E501
         icon="icon.png",
     )
+
+
+@pytest.fixture
+def expected_single_event() -> MyEvent:
+    return expected_event()
+
+
+@pytest.fixture
+def expected_single_event_from_location() -> MyEvent:
+    return expected_event("12345678987")
+
+
+@pytest.fixture
+def expected_single_event_from_conferenceData() -> MyEvent:
+    return expected_event("22345678987")
+
+
+@pytest.fixture
+def expected_single_event_from_description() -> MyEvent:
+    return expected_event("32345678987")
 
 
 def test_parse_events(
@@ -50,6 +69,8 @@ def test_parse_event_no_zoom(
     args: Args, single_raw_event: dict, expected_single_event: MyEvent
 ):
     single_raw_event["location"] = "!GooberZ!"
+    del single_raw_event["conferenceData"]
+    single_raw_event["description"] = "My Test Meeting"
     parsed_events = parse_events([single_raw_event], args)
     expected_single_event.zoom_link = None
     assert len(parsed_events) == 1
@@ -66,19 +87,23 @@ def test_parse_event_multiple_locations(
 
 
 def test_parse_event_conferenceData(
-    args: Args, single_raw_event_conferenceData: dict, expected_single_event: MyEvent
+    args: Args,
+    single_raw_event_conferenceData_only: dict,
+    expected_single_event_from_conferenceData: MyEvent,
 ):
-    parsed_event = parse_event(single_raw_event_conferenceData, args)
-    assert parsed_event == expected_single_event
+    parsed_event = parse_event(single_raw_event_conferenceData_only, args)
+    assert parsed_event == expected_single_event_from_conferenceData
 
 
 def test_parse_event_conferenceData_no_zoom(
-    args: Args, single_raw_event_conferenceData: dict, expected_single_event: MyEvent
+    args: Args,
+    single_raw_event_conferenceData_only: dict,
+    expected_single_event: MyEvent,
 ):
-    single_raw_event_conferenceData["conferenceData"]["entryPoints"][0][
+    single_raw_event_conferenceData_only["conferenceData"]["entryPoints"][0][
         "uri"
     ] = "https://www.google.com"
-    parsed_event = parse_event(single_raw_event_conferenceData, args)
+    parsed_event = parse_event(single_raw_event_conferenceData_only, args)
     expected_single_event.zoom_link = None
     assert parsed_event == expected_single_event
 
@@ -141,3 +166,13 @@ def test_parse_event_no_password(
         "zoommtg://example.zoom.us/join?action=join&confno=12345678987"  # noqa: E501
     )
     assert parsed_event == expected_single_event
+
+
+def test_parse_event_description(
+    args: Args,
+    single_raw_event_description_only: dict,
+    expected_single_event_from_description: MyEvent,
+):
+
+    parsed_event = parse_event(single_raw_event_description_only, args)
+    assert parsed_event == expected_single_event_from_description

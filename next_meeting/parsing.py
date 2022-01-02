@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 from typing import Any, Dict, List, Optional
 from urllib.parse import ParseResult, parse_qs, urlparse
 
+from bs4 import BeautifulSoup
+
 from . import constants as c
 from .alfred import Item, ItemIcon
 from .args import Args, OutputFormat, _debug
@@ -69,6 +71,20 @@ def get_zoom_link(event: Dict[str, str], args: Args) -> Optional[str]:
             )
     else:
         _debug("No conference data found for " + event["summary"], args.format)
+
+    # Now try the description field
+    description = event.get("description", "--empty--")
+    try:
+        soup = BeautifulSoup(description, "html.parser")
+        for link in soup.find_all("a"):
+            href = link.get("href")
+            if "zoom.us" in href:
+                return str(href)
+        _debug(
+            "No zoom links found in description for " + event["summary"], args.format
+        )
+    except Exception as e:
+        _debug(f"Error parsing description: {e}", args.format)
 
     return None
 
@@ -171,6 +187,6 @@ def _debug_event_list(events: List[MyEvent], format: OutputFormat) -> None:
         Event: {event.id}
           Summary: {event.summary}
           Start  : {event.start}
-          Markers: {event.is_not_day_event} | {event.in_progress} | {event.is_next_joinable}  # noqa: E501
-          Link   : {event.zoom_link}"""
+          Markers: {event.is_not_day_event} | {event.in_progress} | {event.is_next_joinable}
+          Link   : {event.zoom_link}"""  # noqa: E501
         _debug(textwrap.dedent(event_string), format)

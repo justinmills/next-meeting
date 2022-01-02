@@ -22,5 +22,24 @@ def single_raw_event() -> dict:
 
 
 @pytest.fixture
-def single_raw_event_conferenceData() -> dict:
-    return f.single_raw_event_conferenceData()
+def single_raw_event_location_only() -> dict:
+    d = f.single_raw_event()
+    del d["conferenceData"]
+    d["description"] = "A meeting description"
+    return d
+
+
+@pytest.fixture
+def single_raw_event_conferenceData_only() -> dict:
+    d = f.single_raw_event()
+    del d["location"]
+    d["description"] = "A meeting description"
+    return d
+
+
+@pytest.fixture
+def single_raw_event_description_only() -> dict:
+    d = f.single_raw_event()
+    del d["conferenceData"]
+    del d["location"]
+    return d

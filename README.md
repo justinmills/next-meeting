@@ -19,8 +19,11 @@ picking that one.
   ```shell
   pipenv install --dev --ignore-pipfile
   ```
-* Do step 1 of the [python quickstart
+* Do prerequisites of the [python quickstart
   guide](https://developers.google.com/calendar/quickstart/python) for Google Calendar.
+  Particularly the part about creating [credentials]
+  (https://developers.google.com/workspace/guides/create-credentials) - I created an
+  [API Key](https://console.cloud.google.com/apis/credentials?project=autolaunchzoom-1601670988869).
   Save this file as `credentials.json`. NOTE: This file is marked as gitignore to
   prevent you from accidentally checking in secret values.
 * Run it!
