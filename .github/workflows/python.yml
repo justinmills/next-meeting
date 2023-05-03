@@ -1,6 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 name: Next Meeting
+run-name: ${{ github.actor }} has pushed content to GitHub
 
 on:
   push:
@@ -14,46 +15,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout Code
-      uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-      # Setup Python (faster than using Python container)
-    - name: Set up Python 3.9.2
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9.2
+      - uses: actions/setup-python@v4
+        with:
+          cache: pipenv
 
-    - name: Install pipenv
-      run: |
-        python -m pip install --upgrade pipenv wheel
-    - id: cache-pipenv
-      uses: actions/cache@v1
-      with:
-        path: ~/.local/share/virtualenvs
-        key: ${{ runner.os }}-pipenv-${{ hashFiles('**/Pipfile.lock') }}
-
-    - name: Install dependencies
-      if: steps.cache-pipenv.outputs.cache-hit != 'true'
-      run: |
-        pipenv install --deploy --dev
+      - name: Install pipenv
+        run: curl https://raw.githubusercontent.com/pypa/pipenv/master/get-pipenv.py | python
+      - name: Install dependencies
+        run: pipenv install --dev
     
-    - name: Linter
-      run: |
-        pipenv run lint
+      - name: Linting
+        run: pipenv run lint
+      - name: Formatting
+        run: pipenv run black --check .
+      - name: Type checking
+        run: pipenv run types
 
-    - name: Type Checking
-      run: |
-        pipenv run types
+      - name: Run test suite
+        run: pipenv run test -svvv --junitxml results.xml
 
-    - name: Run test suite
-      run: |
-        pipenv run test -svvv --junitxml results.xml
-
-    - name: Publish Unit Test Results
-      uses: EnricoMi/publish-unit-test-result-action@v1
-      if: always()
-      with:
-        files: ./**/results.xml
+      - name: Publish Unit Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2.7.0
+        if: always()
+        with:
+          files: ./**/results.xml
 
     # This works, but produces a zip. Not entirely useful
     # - name: Archive code coverage results
