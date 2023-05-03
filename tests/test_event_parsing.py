@@ -173,6 +173,5 @@ def test_parse_event_description(
     single_raw_event_description_only: dict,
     expected_single_event_from_description: MyEvent,
 ):
-
     parsed_event = parse_event(single_raw_event_description_only, args)
     assert parsed_event == expected_single_event_from_description

@@ -19,7 +19,7 @@ google-auth-oauthlib = "*"
 beautifulsoup4 = "*"
 
 [requires]
-python_version = "3.9.2"
+python_version = "3.11.0"
 
 [pipenv]
 allow_prereleases = true
