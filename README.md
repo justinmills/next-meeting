@@ -1,11 +1,14 @@
 Zoom Meeting Joiner
 ===
 
-Script to join the Zoom meeting you're supposed to be in.
+Script to join the online meeting you're supposed to be in.
 
-This works by scraping your Google Calendar looking for meeting with zoom links and
-finding the one currently going on, or if one is about to start in a few minutes,
-picking that one.
+This works by scraping your Google Calendar looking for meetings with video
+links and finding the one that is currently happening, or is about to start in a
+few minutes. It then launches that meeting.
+
+Right now there is only support for meetings with zoom links.
+
 
 ## How to setup
 
