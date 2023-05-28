@@ -60,7 +60,7 @@ def command_list(args: Args) -> None:
         )
         if to_join:
             vars.update(
-                zoom_link=to_join.meeting_link,
+                meeting_link=to_join.meeting_link,
                 title=to_join.summary,
                 start=to_join.start,
             )
