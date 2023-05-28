@@ -32,7 +32,9 @@ class Item:
 
 @dataclass
 class ScriptFilterOutput:
-    """Script Filter Output format"""
+    """Script Filter Output format
+
+    Reference: https://www.alfredapp.com/help/workflows/inputs/script-filter/json/"""
 
     items: List[Item] = field(default_factory=list)
 
@@ -42,6 +44,17 @@ class ScriptFilterOutput:
 
 @dataclass
 class AlfredWorkflow:
+    """Internal object JSON Utility format
+
+    arg is the input (query) for the next component. We set this to be a
+    serialized JSON object of type ScriptFilterOutput. We do this so we can (if
+    need be) feed the output of a Run Script into a Script Filter component to
+    allow the user to select. This is useful in the case where there are
+    multiple meetings to join and the user needs to be presented with each
+    option.
+
+    Reference: https://www.alfredapp.com/help/workflows/utilities/json/"""
+
     arg: str
     config: Optional[Dict[str, str]] = None
     variables: Optional[Dict[str, Optional[Union[str, bool, datetime]]]] = None
@@ -49,7 +62,11 @@ class AlfredWorkflow:
 
 @dataclass
 class JsonUtilityFormat:
-    """Alfred workflow output - JSON Utility"""
+    """Alfred workflow output - JSON Utility
+
+    We use this as the output of a Run Script Action.
+
+    Reference: https://www.alfredapp.com/help/workflows/utilities/json/"""
 
     alfredworkflow: AlfredWorkflow
 
