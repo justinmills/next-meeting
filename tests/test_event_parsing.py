@@ -5,6 +5,8 @@ import pytest
 from next_meeting.args import Args
 from next_meeting.parsing import MyEvent, parse_event, parse_events
 
+from . import factories as f
+
 
 def expected_event(id="12345678987") -> MyEvent:
     return MyEvent(
@@ -177,3 +179,18 @@ def test_parse_event_description(
     parsed_event = parse_event(single_raw_event_description_only, args)
     assert parsed_event == expected_single_event_from_description
     assert parsed_event == expected_single_event_from_description
+
+
+def test_parse_event_google_meet(args: Args):
+    event: MyEvent = parse_event(f.single_raw_event_google_meet(), args)
+    expected: MyEvent = MyEvent(
+        id="44gmeetid44",
+        start=datetime.fromisoformat("2023-05-24T08:00:00-04:00"),
+        summary="Next Meeting Test Google Meet",
+        is_not_day_event=True,
+        in_progress=False,
+        is_next_joinable=False,
+        meeting_link="https://meet.google.com/abc-defg-hig",
+        icon="icon.png",
+    )
+    assert event == expected

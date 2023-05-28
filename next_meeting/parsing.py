@@ -45,22 +45,51 @@ class MyEvent:
         )
 
 
-def get_zoom_link(event: Dict[str, str], args: Args) -> Optional[str]:
-    """Return the zoom link from the event data if it exists"""
-    # First let's look in the location
-    loc = event.get("location", "")
-    if "zoom.us" in loc:
-        # If the meeting is setup as zoom as a location, then it may have multiple.
-        # Split as csv and find the first with zoom.us in it.
-        if "," in loc:
-            loc = next(l for l in loc.split(",") if "zoom.us" in l)  # noqa: E741
-        return loc
+def is_zoom_link(value: str) -> bool:
+    return "zoom.us" in value
 
-    # Safely get this value so we can iterate without getting a StopIteration
+
+def is_google_meet_link(value: str) -> bool:
+    return "meet.google.com" in value
+
+
+def has_meeting_link(value: str) -> bool:
+    """Given a string (presumably a url), parse the meeting link out of it
+
+    NOTE: this is the link used to join the meeting, so it's a URI in as native
+    a format as possible (zoom links for zoom meetings, not http links)"""
+    if is_zoom_link(value):
+        return True
+    elif is_google_meet_link(value):
+        return True
+    return False
+
+
+def get_meeting_link(event: Dict[str, str], args: Args) -> Optional[str]:
+    """Given a parsed GCal event return any found meeting link
+
+    Order is:
+    - location
+    - conferenceData (conferenceData.entrypoints[].uri)
+    - description
+
+    Within each of these, we prefer zoom links over Google meet links (sorry
+    Google).
+
+    Reference: https://developers.google.com/calendar/api/v3/reference/events"""
+
+    # Location - note this may be a csv of locations
+    locations: List[str] = event.get("location", "").split(",")
+    location: str | None = next(
+        (location for location in locations if has_meeting_link(location)), None
+    )
+    if location:
+        return str(location)
+
+    # Conference Data - this is a list so we must check each element
     eps = event.get("conferenceData", {}).get("entryPoints", [])  # type: ignore
     if eps:
-        # Default arg to next to deal with no zoom links
-        found = next((ep for ep in eps if "zoom.us" in ep.get("uri", "")), None)
+        found = next((ep for ep in eps if has_meeting_link(ep.get("uri", ""))), None)
         if found:
             return str(found["uri"])
         else:
@@ -72,13 +101,13 @@ def get_zoom_link(event: Dict[str, str], args: Args) -> Optional[str]:
     else:
         _debug("No conference data found for " + event["summary"], args.format)
 
-    # Now try the description field
-    description = event.get("description", "--empty--")
+    # Description - any links (parsed as HTML)
+    description: str = event.get("description", "--empty--")
     try:
-        soup = BeautifulSoup(description, "html.parser")
+        soup: BeautifulSoup = BeautifulSoup(description, "html.parser")
         for link in soup.find_all("a"):
             href = link.get("href")
-            if "zoom.us" in href:
+            if has_meeting_link(href):
                 return str(href)
         _debug(
             "No zoom links found in description for " + event["summary"], args.format
@@ -87,6 +116,16 @@ def get_zoom_link(event: Dict[str, str], args: Args) -> Optional[str]:
         _debug(f"Error parsing description: {e}", args.format)
 
     return None
+
+
+def get_icon(summary: str) -> str:
+    """Given some details about a meeting, return the icon we should use"""
+    if "1:1" in summary:
+        return "one.png"
+    elif "Standup" in summary:
+        return "standup.png"
+
+    return "icon.png"
 
 
 def convert_to_zoom_protocol(url: str) -> str:
@@ -149,25 +188,21 @@ def parse_event(event: Dict[str, Any], args: Args) -> MyEvent:
 
     summary = event["summary"]
 
-    link = get_zoom_link(event, args)
-    zoom_link = None
-    if link:
-        zoom_link = convert_to_zoom_protocol(link)
+    meeting_link: str | None = get_meeting_link(event, args)
+    if meeting_link and is_zoom_link(meeting_link):
+        # Convert from a https link to a zoom meeting (which will just open a
+        # tab you have to close later, convert it to the native protocol to open
+        # the app directly)
+        meeting_link = convert_to_zoom_protocol(meeting_link)
 
-    icon = None
-    if "1:1" in summary:
-        icon = "one.png"
-    elif "Standup" in summary:
-        icon = "standup.png"
-    else:
-        icon = "icon.png"
+    icon = get_icon(summary)
 
     return MyEvent(
         id=id,
         start=start,
         summary=summary,
         is_not_day_event=is_not_day,
-        meeting_link=zoom_link,
+        meeting_link=meeting_link,
         in_progress=in_progress,
         is_next_joinable=is_next_joinable,
         icon=icon,

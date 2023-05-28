@@ -35,3 +35,8 @@ def single_raw_event() -> Dict[str, str]:
     Specialized methods follow that will trim out selective pieces.
     """
     return read_event_file("single-event-all-3")
+
+
+def single_raw_event_google_meet() -> Dict[str, str]:
+    """Reads an event file with a single google meet event in it"""
+    return read_event_file("single-event-google-meet")

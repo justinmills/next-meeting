@@ -1,0 +1,50 @@
+{
+    "kind": "calendar#event",
+    "etag": "\"etag\"",
+    "id": "44gmeetid44",
+    "status": "confirmed",
+    "htmlLink": "https://www.google.com/calendar/event?eid=AA44gmeet44AA",
+    "created": "2023-05-28T16:13:09.000Z",
+    "updated": "2023-05-28T16:13:09.091Z",
+    "summary": "Next Meeting Test Google Meet",
+    "creator": {
+        "email": "testing@example.com",
+        "self": true
+    },
+    "organizer": {
+        "email": "testing@example.com",
+        "self": true
+    },
+    "start": {
+        "dateTime": "2023-05-24T08:00:00-04:00",
+        "timeZone": "America/New_York"
+    },
+    "end": {
+        "dateTime": "2023-05-24T08:30:00-04:00",
+        "timeZone": "America/New_York"
+    },
+    "iCalUID": "iCalUID@google.com",
+    "sequence": 0,
+    "hangoutLink": "https://meet.google.com/abc-defg-hig",
+    "conferenceData": {
+        "entryPoints": [
+            {
+                "entryPointType": "video",
+                "uri": "https://meet.google.com/abc-defg-hig",
+                "label": "meet.google.com/abc-defg-hig"
+            }
+        ],
+        "conferenceSolution": {
+            "key": {
+                "type": "hangoutsMeet"
+            },
+            "name": "Google Meet",
+            "iconUri": "https://fonts.gstatic.com/s/i/productlogos/meet_2020q4/v6/web-512dp/logo_meet_2020q4_color_2x_web_512dp.png"
+        },
+        "conferenceId": "abc-defg-hig"
+    },
+    "reminders": {
+        "useDefault": true
+    },
+    "eventType": "default"
+}
