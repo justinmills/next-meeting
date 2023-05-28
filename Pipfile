@@ -42,4 +42,4 @@ list_no_options = "python ./nm.py -c list -f alfred -n 2021-07-06T17:03:00.00000
 #
 lint = "flake8"
 types = "mypy next_meeting"
-test = "pytest -s"
+test = "pytest"

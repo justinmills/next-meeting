@@ -1,16 +1,9 @@
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--verbose -ra --cov=. --cov-report=html --cov-report=xml --cov-fail-under=78"
-testpaths = [
-    "tests"
-]
-looponfailroots = [
-    "next_meeting",
-    "tests"
-]
+addopts = "--capture=tee-sys -vv -ra --cov=. --cov-report=html --cov-report=xml --cov-fail-under=81"
+testpaths = ["tests"]
+looponfailroots = ["next_meeting", "tests"]
 
 [tool.coverage.run]
 branch = true
-omit = [
-    "tests/*",
-]
+omit = ["tests/*"]

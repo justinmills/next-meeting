@@ -82,6 +82,6 @@ def entrypoint() -> None:
     if args.command == Command.list:
         command_list(args)
     elif args.command == Command.join:
-        pass
+        _output("TODO: Implement the join command")
     else:
-        pass
+        raise Exception(f"Unknown command: {args.command}")

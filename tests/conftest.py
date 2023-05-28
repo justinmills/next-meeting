@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytest
+
 from next_meeting.args import Args, Command, OutputFormat
 
 from . import factories as f
@@ -12,7 +13,7 @@ def now() -> datetime:
 
 
 @pytest.fixture
-def args(now) -> Args:
+def args() -> Args:
     return Args(command=Command.list, format=OutputFormat.alfred)
 
 
@@ -42,4 +43,5 @@ def single_raw_event_description_only() -> dict:
     d = f.single_raw_event()
     del d["conferenceData"]
     del d["location"]
+    return d
     return d
