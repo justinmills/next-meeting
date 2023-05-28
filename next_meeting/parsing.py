@@ -27,7 +27,7 @@ class MyEvent:
     in_progress: bool = False
     # Does this event start within a "joinable" time frame?
     is_next_joinable: bool = False
-    zoom_link: Optional[str] = None
+    meeting_link: Optional[str] = None
     icon: Optional[str] = None
 
     def to_item(self) -> Item:
@@ -36,7 +36,7 @@ class MyEvent:
             uid=self.id,
             title=self.summary,
             subtitle=f"Starting at {self.start}",
-            arg=self.zoom_link,
+            arg=self.meeting_link,
             variables=dict(
                 title=self.summary,
                 start=self.start,
@@ -96,6 +96,9 @@ def convert_to_zoom_protocol(url: str) -> str:
       https://example.zoom.us/j/1234?pwd=abcd
     to this
       zoommtg://example.zoom.us/join?action=join&confno=1234&pwd=abcd
+
+    This is so you can delegate to the OS to open a zoom meeting directly in the
+    app instead of going through the browser to then open zoom.
     """
     parsed: ParseResult = urlparse(url)
     hostname: Optional[str] = parsed.hostname
@@ -164,7 +167,7 @@ def parse_event(event: Dict[str, Any], args: Args) -> MyEvent:
         start=start,
         summary=summary,
         is_not_day_event=is_not_day,
-        zoom_link=zoom_link,
+        meeting_link=zoom_link,
         in_progress=in_progress,
         is_next_joinable=is_next_joinable,
         icon=icon,
@@ -172,7 +175,11 @@ def parse_event(event: Dict[str, Any], args: Args) -> MyEvent:
 
 
 def parse_events(events: List[Dict[str, str]], args: Args) -> List[MyEvent]:
-    """Converts a Google calendar event (dict) into a MyEvent"""
+    """Converts a list of Google calendar events into a List of MyEvents
+
+    Each GCal event is stored in a dict and each one will be converted to a
+    MyEvent whether or not it has a meeting in it or not.
+    """
 
     def augment(event: Dict[str, str]) -> MyEvent:
         return parse_event(event, args)
@@ -188,5 +195,5 @@ def _debug_event_list(events: List[MyEvent], format: OutputFormat) -> None:
           Summary: {event.summary}
           Start  : {event.start}
           Markers: {event.is_not_day_event} | {event.in_progress} | {event.is_next_joinable}
-          Link   : {event.zoom_link}"""  # noqa: E501
+          Link   : {event.meeting_link}"""  # noqa: E501
         _debug(textwrap.dedent(event_string), format)

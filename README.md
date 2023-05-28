@@ -1,4 +1,4 @@
-Zoom Meeting Joiner
+Meeting Joiner
 ===
 
 Script to join the online meeting you're supposed to be in.

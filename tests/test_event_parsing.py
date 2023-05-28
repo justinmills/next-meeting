@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytest
+
 from next_meeting.args import Args
 from next_meeting.parsing import MyEvent, parse_event, parse_events
 
@@ -13,7 +14,7 @@ def expected_event(id="12345678987") -> MyEvent:
         is_not_day_event=True,
         in_progress=False,
         is_next_joinable=False,
-        zoom_link=f"zoommtg://example.zoom.us/join?action=join&confno={id}&pwd=SUPERSECRET1234",  # noqa: E501
+        meeting_link=f"zoommtg://example.zoom.us/join?action=join&confno={id}&pwd=SUPERSECRET1234",  # noqa: E501
         icon="icon.png",
     )
 
@@ -72,7 +73,7 @@ def test_parse_event_no_zoom(
     del single_raw_event["conferenceData"]
     single_raw_event["description"] = "My Test Meeting"
     parsed_events = parse_events([single_raw_event], args)
-    expected_single_event.zoom_link = None
+    expected_single_event.meeting_link = None
     assert len(parsed_events) == 1
     assert parsed_events[0] == expected_single_event
 
@@ -104,7 +105,7 @@ def test_parse_event_conferenceData_no_zoom(
         "uri"
     ] = "https://www.google.com"
     parsed_event = parse_event(single_raw_event_conferenceData_only, args)
-    expected_single_event.zoom_link = None
+    expected_single_event.meeting_link = None
     assert parsed_event == expected_single_event
 
 
@@ -162,7 +163,7 @@ def test_parse_event_no_password(
 ):
     single_raw_event["location"] = "https://example.zoom.us/j/12345678987"
     parsed_event = parse_event(single_raw_event, args)
-    expected_single_event.zoom_link = (
+    expected_single_event.meeting_link = (
         "zoommtg://example.zoom.us/join?action=join&confno=12345678987"  # noqa: E501
     )
     assert parsed_event == expected_single_event
@@ -174,4 +175,5 @@ def test_parse_event_description(
     expected_single_event_from_description: MyEvent,
 ):
     parsed_event = parse_event(single_raw_event_description_only, args)
+    assert parsed_event == expected_single_event_from_description
     assert parsed_event == expected_single_event_from_description

@@ -47,7 +47,7 @@ def command_list(args: Args) -> None:
 
     _debug_event_list(events, args.format)
 
-    filtered_events = [e for e in events if e.is_not_day_event and e.zoom_link]
+    filtered_events = [e for e in events if e.is_not_day_event and e.meeting_link]
 
     if args.format == OutputFormat.alfred:
         items = [e.to_item() for e in filtered_events]
@@ -60,7 +60,7 @@ def command_list(args: Args) -> None:
         )
         if to_join:
             vars.update(
-                zoom_link=to_join.zoom_link,
+                zoom_link=to_join.meeting_link,
                 title=to_join.summary,
                 start=to_join.start,
             )
