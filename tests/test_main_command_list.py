@@ -45,7 +45,7 @@ def test_command_list_meeting_to_join(
         id="77gcalEventId_20210712T133000Z",
         start=datetime(2021, 7, 12, 9, 30, 00, tzinfo=timezone(-timedelta(hours=4))),
         summary="JIRA Board Review",
-        meeting_link="zoommtg://example.zoom.us/join?action=join&confno=12345678987&pwd=SUPERSECRET1234",
+        meeting_link="zoommtg://example.zoom.us/join?action=join&confno=12345678987&pwd=SUPERSECRET1234",  # noqa: E501
         icon="icon.png",
     )
     expected: JsonUtilityFormat = JsonUtilityFormat(
@@ -55,7 +55,7 @@ def test_command_list_meeting_to_join(
             variables=dict(
                 need_to_prompt=True,
                 next_meeting=NextMeetingOptions.FoundNextMeeting.value,
-                zoom_link="zoommtg://example.zoom.us/join?action=join&confno=12345678987&pwd=SUPERSECRET1234",
+                meeting_link="zoommtg://example.zoom.us/join?action=join&confno=12345678987&pwd=SUPERSECRET1234",  # noqa: E501
                 title="JIRA Board Review",
                 start="2021-07-12T09:30:00-04:00",
             ),
