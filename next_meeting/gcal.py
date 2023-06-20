@@ -4,6 +4,7 @@ import pickle
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional
 
+from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -60,9 +61,23 @@ def _fetch_creds() -> Optional[Credentials]:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
+        re_auth = True
+        
         if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
+            # this may fail if the request token has a short ttl, so treat it as a
+            # re-auth flow.
+            try:
+                creds.refresh(Request())
+                # Made it this far, no need to re-auth
+                re_auth = False
+            except RefreshError as e:
+                if "Token has been expired or revoked" in str(e):
+                    _debug("Token expired, time to reauth", e)
+                    re_auth = True
+                else:
+                    raise
+
+        if re_auth:
             flow: InstalledAppFlow = InstalledAppFlow.from_client_secrets_file(
                 "credentials.json", c.SCOPES
             )
