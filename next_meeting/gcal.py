@@ -62,7 +62,7 @@ def _fetch_creds() -> Optional[Credentials]:
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         re_auth = True
-        
+
         if creds and creds.expired and creds.refresh_token:
             # this may fail if the request token has a short ttl, so treat it as a
             # re-auth flow.

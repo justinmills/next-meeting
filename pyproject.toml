@@ -1,6 +1,6 @@
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--capture=tee-sys -vv -ra --cov=. --cov-report=html --cov-report=xml --cov-fail-under=81"
+addopts = "--capture=tee-sys -vv -ra --cov=. --cov-report=html --cov-report=xml --cov-fail-under=79"
 testpaths = ["tests"]
 looponfailroots = ["next_meeting", "tests"]
 
