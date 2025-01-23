@@ -7,3 +7,62 @@ looponfailroots = ["next_meeting", "tests"]
 [tool.coverage.run]
 branch = true
 omit = ["tests/*"]
+
+[tool.poetry]
+name = "next-meeting"
+version = "0.1.0"
+description = ""
+authors = ["y"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+beautifulsoup4 = "^4.12.3"
+google-api-python-client = "^2.159.0"
+google-auth-httplib2 = "^0.2.0"
+google-auth-oauthlib = "^1.2.1"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.10.0"
+mypy = "^1.14.1"
+flake8 = "^7.1.1"
+pytest = "^8.3.4"
+flake8-black = "^0.3.6"
+pytest-cov = "^6.0.0"
+pytest-xdist = "^3.6.1"
+ruff = "^0.9.2"
+poethepoet = "^0.32.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+next-meeting = "next_meeting.main:entrypoint"
+
+[tool.poe.tasks]
+test = "pytest"
+lint = "flake8"
+types = "mypy next_meeting"
+
+# Shortcuts for testing various things
+list = "next-meeting -c list -f alfred"
+# The following are for testing various edge cases. These just happen to be
+# times on my calendar when I have meetings that trigger the various edge cases
+# I want to test.
+#
+# NOTE: All of these are on my personal calendar and not my work calendar so you
+# must remove the token.pickle file, re-auth with my personal calendar and then
+# test them out (not forgetting to undo that and re-auth with your work calendar
+# after).
+#
+# Multiple meetings (one ending at 10:40 and another starting at 10:30)
+list_options = "python ./nm.py -c list -f alfred -n 2023-05-23T10:30:00.000000-04:00"
+# Only one choice of meetings to join
+list_one_choice = "python ./nm.py -c list -f alfred -n 2023-05-23T07:58:00.000000-04:00"
+list_one_choice_gcal = "python ./nm.py -c list -f alfred -n 2023-05-24T07:58:00.000000-04:00"
+# No meetings to join
+list_no_options = "python ./nm.py -c list -f alfred -n 2023-05-23T16:03:00.000000-04:00"
+# One in progress and another one starting immediately after
+list_join_next = "python ./nm.py -c list -f alfred -n 2023-05-23T12:29:00.000000-04:00"
