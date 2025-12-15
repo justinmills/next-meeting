@@ -45,6 +45,7 @@ next-meeting = "next_meeting.main:entrypoint"
 test = "pytest"
 lint = "flake8"
 types = "mypy next_meeting"
+format = "black --check ."
 
 # Shortcuts for testing various things
 list = "next-meeting -c list -f alfred"

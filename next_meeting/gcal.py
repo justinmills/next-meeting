@@ -67,12 +67,12 @@ def _fetch_creds() -> Optional[Credentials]:
             # this may fail if the request token has a short ttl, so treat it as a
             # re-auth flow.
             try:
-                creds.refresh(Request())
+                creds.refresh(Request())  # type: ignore
                 # Made it this far, no need to re-auth
                 re_auth = False
             except RefreshError as e:
                 if "Token has been expired or revoked" in str(e):
-                    _debug("Token expired, time to reauth", e)
+                    _debug("Token expired, time to reauth", e)  # type: ignore
                     re_auth = True
                 else:
                     raise
