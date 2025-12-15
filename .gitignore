@@ -7,3 +7,4 @@ zoom.log
 /htmlcov
 .coverage
 coverage.xml
+/results.xml
