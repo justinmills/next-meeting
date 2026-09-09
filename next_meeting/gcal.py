@@ -71,11 +71,8 @@ def _fetch_creds() -> Optional[Credentials]:
                 # Made it this far, no need to re-auth
                 re_auth = False
             except RefreshError as e:
-                if "Token has been expired or revoked" in str(e):
-                    _debug("Token expired, time to reauth", e)  # type: ignore
-                    re_auth = True
-                else:
-                    raise
+                _debug(f"Token refresh failed ({e}), triggering re-auth")
+                re_auth = True
 
         if re_auth:
             flow: InstalledAppFlow = InstalledAppFlow.from_client_secrets_file(
